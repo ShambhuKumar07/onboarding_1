@@ -1,0 +1,84 @@
+
+{% block content %}
+<div class="dashboard-container">
+    <h4 class="dashboard-header">Attrition Report</h4>
+
+    <!-- Combo Box for Year Selection -->
+    <div class="form-group">
+        <label for="yearSelector">Select Year:</label>
+ 
+
+        <select id="yearSelector" class="form-control">
+            {% for year in attrition_years %}
+                <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+        </select>
+        
+    </div>
+
+    <!-- Bar Chart for Attrition Data -->
+    <div class="chart-card">
+        <h5 class="chart-title">Attrition by Month</h5>
+        <canvas id="attritionBarChart" class="responsive-chart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const attritionData = JSON.parse(document.getElementById('attrition_data').textContent);
+        const years = attritionData.years;
+        const dataByYear = attritionData.data;
+        const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        const ctx = document.getElementById('attritionBarChart').getContext('2d');
+        let attritionChart;
+
+        function updateChart(year) {
+            // Destroy the old chart if it exists
+            if (attritionChart) {
+                attritionChart.destroy();
+            }
+
+            // Create a new chart for the selected year
+            attritionChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: monthLabels,
+                    datasets: [{
+                        label: `Attrition Count (${year})`,
+                        data: dataByYear[year] || Array(12).fill(0),
+                        backgroundColor: '#FF6384',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: 'Months' } },
+                        y: { 
+                            title: { display: true, text: 'Count' }, 
+                            beginAtZero: true 
+                        },
+                    },
+                }
+            });
+        }
+
+        // Populate the chart with the default year (first in the list)
+        const yearSelector = document.getElementById('yearSelector');
+        updateChart(yearSelector.value);
+
+        // Update the chart when the year changes
+        yearSelector.addEventListener('change', function () {
+            updateChart(this.value);
+        });
+    });
+</script>
+
+<script type="application/json" id="attrition_data">
+    {{ attrition_data|safe }}
+</script>
+{% endblock %}

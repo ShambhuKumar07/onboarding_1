@@ -1,0 +1,205 @@
+{% extends 'core/base.html' %}
+{% load humanize %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h4 class="dashboard-header">Employee Statistics</h4>
+    <div class="dashboard-grid">
+        <!-- Gender Distribution Chart -->
+        <div class="chart-card">
+            <h5 class="chart-title">Gender Distribution</h5>
+            <canvas id="genderChart" class="responsive-chart"></canvas>
+        </div>
+
+        <!-- Age Distribution Chart -->
+        <div class="chart-card">
+            <h5 class="chart-title">Age Distribution</h5>
+            <canvas id="ageChart" class="responsive-chart"></canvas>
+        </div>
+
+        <!-- Attrition Chart -->
+        <div class="chart-card">
+            <h5 class="chart-title">Attrition</h5>
+            <canvas id="attritionChart" class="responsive-chart"></canvas>
+        </div>
+
+        <!-- Hiring Report Chart -->
+        <div class="chart-card">
+            <h5 class="chart-title">Hiring Report</h5>
+            <canvas id="hiringChart" class="responsive-chart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Advanced CSS for High-Level Styling -->
+<style>
+    /* General Reset */
+    body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #f0f4f7, #e0e7ec);
+        color: #444;
+    }
+
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #ffffff;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .dashboard-header {
+        text-align: center;
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 30px;
+        font-weight: bold;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .chart-card {
+        padding: 20px;
+        border-radius: 16px;
+        background: linear-gradient(145deg, #ffffff, #e6e6e6);
+        box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.1), -6px -6px 12px rgba(255, 255, 255, 0.5);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .chart-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.2), -8px -8px 20px rgba(255, 255, 255, 0.7);
+    }
+
+    .chart-title {
+        text-align: center;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+        color: #555;
+        font-weight: 600;
+    }
+
+    .responsive-chart {
+        width: 100%;
+        max-height: 300px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .dashboard-header {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<!-- Include Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Parse data from JSON script tags
+        const genderData = JSON.parse(document.getElementById('gender_data').textContent);
+        const ageData = JSON.parse(document.getElementById('age_data').textContent);
+        const attritionData = JSON.parse(document.getElementById('attrition_data').textContent);
+        const hiringData = JSON.parse(document.getElementById('hiring_data_chart').textContent);
+
+        // Function to initialize a chart
+        function createChart(chartId, chartType, labels, data, backgroundColors) {
+            const ctx = document.getElementById(chartId);
+            if (ctx) {
+                new Chart(ctx, {
+                    type: chartType,
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: backgroundColors,
+                            hoverOffset: 4,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                        },
+                    }
+                });
+            }
+        }
+
+        // Gender Chart
+        if (genderData.length > 0) {
+            const genderLabels = genderData.map(item => item.gender === 'ML' ? 'Male' : 'Female');
+            const genderCounts = genderData.map(item => item.count);
+            createChart('genderChart', 'pie', genderLabels, genderCounts, ['#36A2EB', '#FF6384']);
+        }
+
+        // Age Chart
+        if (ageData.length > 0) {
+            const ageLabels = ageData.map(item => item.label);
+            const ageCounts = ageData.map(item => item.count);
+            createChart('ageChart', 'pie', ageLabels, ageCounts, ['#FF9F40', '#FFCD56', '#4BC0C0']);
+        }
+
+        // Attrition Chart
+        if (attritionData.length > 0) {
+            const attritionLabels = attritionData.map(item => item.label);
+            const attritionCounts = attritionData.map(item => item.count);
+            createChart('attritionChart', 'pie', attritionLabels, attritionCounts, ['#FF6384', '#4BC0C0']);
+        } else {
+            console.log("No attrition data available for chart.");
+        }
+
+        // Hiring Chart
+        if (hiringData.length > 0) {
+            const hiringLabels = hiringData.map(item => item.label);
+            const hiringCounts = hiringData.map(item => item.count);
+            createChart('hiringChart', 'pie', hiringLabels, hiringCounts, ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']);
+        }
+    });
+</script>
+
+<!-- Pass dynamic data from Django view -->
+<script type="application/json" id="gender_data">
+    {{ gender_data|safe }}
+</script>
+<script type="application/json" id="age_data">
+    {{ age_data|safe }}
+</script>
+<script type="application/json" id="attrition_data">
+    {{ attrition_data|safe }}
+</script>
+<script type="application/json" id="hiring_data_chart">
+    {{ hiring_data_chart|safe }}
+</script>
+
+{% endblock %}
+
+
+
+
+
+// Attrition Chart (Bar)
+if (attritionData.length > 0) {
+    const attritionLabels = attritionData.map(item => item.label);
+    const attritionCounts = attritionData.map(item => item.count);
+    createChart('attritionChart', 'bar', attritionLabels, attritionCounts, ['#FF6384', '#4BC0C0']);
+} else {
+    console.log("No attrition data available for chart.");
+}
+
+// Hiring Chart (Bar)
+if (hiringData.length > 0) {
+    const hiringLabels = hiringData.map(item => item.label);
+    const hiringCounts = hiringData.map(item => item.count);
+    createChart('hiringChart', 'bar', hiringLabels, hiringCounts, ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']);
+}

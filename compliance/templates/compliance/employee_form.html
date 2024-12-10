@@ -1,0 +1,37 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Employee</title>
+    <link rel="stylesheet" href="{% static 'compliance/style.css' %}">
+</head>
+<body>
+    <h2>Add Compliance</h2>
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- Dropdown for selecting Applicant -->
+        <label for="applicant">Select Applicant:</label>
+        <select id="applicant" name="applicant" required>
+            <option value="">-- Select Applicant --</option>
+            {% for applicant in applicants %}
+                <option value="{{ applicant.id }}">{{ applicant.user.username }} - {{ applicant.phone }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="uan_number">UAN No.:</label>
+        <input type="text" id="uan_number" name="uan_number" maxlength="12" required>
+
+        <label for="pan_number">PAN No.:</label>
+        <input type="text" id="pan_number" name="pan_number" maxlength="10" required>
+
+        <label for="esic_number">ESIC No.:</label>
+        <input type="text" id="esic_number" name="esic_number" maxlength="17" required>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

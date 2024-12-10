@@ -1,0 +1,29 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Contact (Page 3)</title>
+    <link rel="stylesheet" href="{% static 'applicant/css/styles.css' %}">
+</head>
+<body>
+    <h1>Emergency Contact Details</h1>
+
+    <form method="POST" action="{% url 'applicant:page_3' %}">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Automatically render form fields -->
+
+        <button><input type="submit" value="Save"></button>
+    </form>
+    <br>
+ 
+    <div class="button-group">
+        <button class="previous"><a href="{% url 'applicant:page_2' %}">Previous</a></button>
+        <button class="back-to-dashboard"><a href="{% url 'applicant:dashboard' %}">Back to Dashboard</a></button>
+        <button class="next"><a href="{% url 'applicant:page_4' %}">Next</a></button>
+    </div>
+</body>
+</html>

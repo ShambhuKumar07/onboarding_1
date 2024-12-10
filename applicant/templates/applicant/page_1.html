@@ -1,0 +1,38 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Information (Page 1)</title>
+    <link rel="stylesheet" href="{% static 'applicant/css/styles.css' %}">
+</head>
+<body>
+    <h1>Personal Information Sheet</h1>
+
+    <form method="post" action="{% url 'applicant:page_1' %}">
+        {% csrf_token %}
+
+        <table>
+            {% for field in form %}
+            <tr>
+                <td><label for="{{ field.id_for_label }}">{{ field.label }}</label></td>
+                <td>{{ field }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div class="button-group">
+            <button><input type="submit" value="Save"></button>
+        </div>
+    </form>
+
+    <div class="button-group">
+        <button class="back-to-dashboard"><a href="{% url 'applicant:dashboard' %}">Back to Dashboard</a></button>
+        <button><a href="{% url 'applicant:page_2' %}">Next</a></button>
+    </div>
+
+    <br>
+</body>
+</html>

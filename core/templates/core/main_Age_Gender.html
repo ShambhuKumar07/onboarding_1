@@ -1,0 +1,109 @@
+{% extends 'core/base.html' %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col s12">
+        <h5>Employee Statistics</h5>
+        <div class="row">
+            <div class="col s4">
+                <h6>Gender Distribution</h6>
+                <canvas id="genderChart" width="40px" height="40px"></canvas>
+            </div>
+            <div class="col s4">
+                <h6>Age Distribution</h6>
+                <canvas id="ageChart" width="40px" height="40px"></canvas>
+            </div>
+            <div class="col s4">
+                <h6>Attrition</h6>
+                <canvas id="attritionChart" width="40px" height="40px"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Parse data from JSON script tags
+        const genderData = JSON.parse(document.getElementById('gender_data').textContent);
+        const ageData = JSON.parse(document.getElementById('age_data').textContent);
+        const attritionData = JSON.parse(document.getElementById('attrition_data').textContent);
+
+        // Populate Gender Chart
+        if (genderData.length > 0) {
+            const genderLabels = genderData.map(item => item.gender === 'ML' ? 'Male' : 'Female');
+            const genderCounts = genderData.map(item => item.count);
+
+            new Chart(document.getElementById('genderChart'), {
+                type: 'pie',
+                data: {
+                    labels: genderLabels,
+                    datasets: [{
+                        data: genderCounts,
+                        backgroundColor: ['#36A2EB', '#FF6384'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                }
+            });
+        }
+
+        // Populate Age Chart
+        if (ageData.length > 0) {
+            const ageLabels = ageData.map(item => item.label);
+            const ageCounts = ageData.map(item => item.count);
+
+            new Chart(document.getElementById('ageChart'), {
+                type: 'pie',
+                data: {
+                    labels: ageLabels,
+                    datasets: [{
+                        data: ageCounts,
+                        backgroundColor: ['#FF9F40', '#FFCD56', '#4BC0C0'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                }
+            });
+        }
+
+        // Populate Attrition Chart
+        if (attritionData.length > 0) {
+            const attritionLabels = attritionData.map(item => item.label);
+            const attritionCounts = attritionData.map(item => item.count);
+
+            new Chart(document.getElementById('attritionChart'), {
+                type: 'pie',
+                data: {
+                    labels: attritionLabels,
+                    datasets: [{
+                        data: attritionCounts,
+                        backgroundColor: ['#FF6384', '#4BC0C0'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                }
+            });
+        }
+    });
+</script>
+
+<!-- Pass dynamic data from Django view -->
+<script type="application/json" id="gender_data">
+    {{ gender_data|safe }}
+</script>
+<script type="application/json" id="age_data">
+    {{ age_data|safe }}
+</script>
+{% comment %} <script type="application/json" id="attrition_data">
+    {{ attrition_data|safe }}
+</script> {% endcomment %}
+
+{% endblock %}

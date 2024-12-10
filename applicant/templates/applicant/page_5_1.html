@@ -1,0 +1,72 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Qualification (Page 5)</title>
+    <link rel="stylesheet" href="{% static 'applicant/css/styles.css' %}">
+</head>
+<body>
+    <h1>Educational Qualification</h1>
+
+    <form method="POST" action="{% url 'applicant:page_5' %}">
+        {% csrf_token %}
+        
+        <table>
+            <tr>
+                <th>Examination Passed</th>
+                <th>Year of Passing</th>
+                <th>School/College/University</th>
+                <th>Subjects</th>
+                <th>Division</th>
+            </tr>
+            <tr>
+                <td>{{ form.exam_passed }}</td>
+                <td>{{ form.year_of_passing }}</td>
+                <td>{{ form.school_college_university }}</td>
+                <td>{{ form.subjects }}</td>
+                <td>{{ form.division }}</td>
+            </tr>
+
+            <tr>
+                <td>{{ form.exam_passed }}</td>
+                <td>{{ form.year_of_passing }}</td>
+                <td>{{ form.school_college_university }}</td>
+                <td>{{ form.subjects }}</td>
+                <td>{{ form.division }}</td>
+            </tr>
+
+
+
+            <tr>
+                <td>{{ form.exam_passed }}</td>
+                <td>{{ form.year_of_passing }}</td>
+                <td>{{ form.school_college_university }}</td>
+                <td>{{ form.subjects }}</td>
+                <td>{{ form.division }}</td>
+            </tr>
+
+
+            <tr>
+                <td>{{ form.exam_passed }}</td>
+                <td>{{ form.year_of_passing }}</td>
+                <td>{{ form.school_college_university }}</td>
+                <td>{{ form.subjects }}</td>
+                <td>{{ form.division }}</td>
+            </tr>
+
+        </table>
+
+        <input type="submit" value="Save">
+    </form>
+   
+    <div class="button-group">
+        <button class="previous"><a href="{% url 'applicant:page_4' %}">Previous</a></button>
+        <button class="back-to-dashboard"><a href="{% url 'applicant:dashboard' %}">Back to Dashboard</a></button>
+        <button class="next"><a href="{% url 'applicant:page_6' %}">Next</a></button>
+    </div>
+<br>
+</body>
+</html>

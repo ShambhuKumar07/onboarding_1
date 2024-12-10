@@ -1,0 +1,40 @@
+{% load cropping %}
+{% load static %}
+<div id="slide-out" class="sidenav sidenav-fixed sidenav-custom">
+    <div class="white-text sidebar-title">
+        <h4>ONBOARDING</h4>
+    </div>
+    <div class="sidebar-user">
+        <span>{{ user.username }}</span>
+        {% if user.is_staff %}
+        <span class="badge orange white-text">ADMIN</span>
+        {% endif %}
+    </div>
+    <div>
+        <div class="sidebar-photo">
+            {% if user.profile.picture %}
+            <img src="{% cropped_thumbnail user.profile 'cropping' scale=0.5 %}">
+            {% else %}
+            <img src="{% static 'img/profile.png' %}" alt="">
+            {% endif %}
+        </div>
+    </div>
+    <ul>
+        <li><a href="{% url 'core:main_page' %}" class="custom-a">Home</a></li>
+        <li><a href="{% url 'onboarding:onboarding_list' %}" class="custom-a">Onboardings</a></li>
+        <li><a href="{% url 'onboarding:task_list' %}" class="custom-a">Tasks</a></li>
+
+        {% if user.is_staff %}
+        <!-- Only visible to admin users -->
+        <li><a href="{% url 'employee_ctc' %}" class="custom-a">Compensation</a></li>
+        <li><a href="{% url 'add_employee' %}" class="custom-a">Compliance</a></li>
+        
+        <!-- MIS Report link using the logged-in user's profile ID -->
+        <li><a href="{% url 'users:profile_detail' profile_id=user.profile.id %}" class="custom-a">MIS Report</a></li>
+        <li><a href="{% url 'users:attrition_report' %}" class="custom-a">Attrition Report</a></li>
+        <li><a href="{% url 'users:hiring_report' %}" class="custom-a">Hiring Report</a></li>
+
+        <li><a href="{% url 'admin:index' %}" class="custom-a">Admin</a></li>
+        {% endif %}
+    </ul>
+</div>

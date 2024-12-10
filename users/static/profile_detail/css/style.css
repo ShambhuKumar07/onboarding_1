@@ -1,0 +1,141 @@
+/* Reset styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fa;
+    color: #333;
+    margin: 20px;
+}
+
+/* Heading styles */
+h1 {
+    color: #202020;
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+h2 {
+    color: #162161;
+    font-size: 1.5em;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #e0e4e8;
+    padding-bottom: 5px;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+    
+}
+
+th {
+    background-color: #073f5c;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+td {
+    color: #555;
+}
+
+/* Table rows for better readability */
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Dropdown and button styling */
+label {
+    font-size: 1em;
+    margin-right: 10px;
+}
+
+select {
+    padding: 8px;
+    font-size: 1em;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+button, input[type="submit"] {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    font-size: 1em;
+    color: white;
+    background-color: #020b0f;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover, input[type="submit"]:hover {
+    background-color: #316f8a;
+}
+
+a {
+    color: #3a87ad;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Button group styling */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    max-width: 500px;
+    margin: 20px auto;
+}
+
+button.previous, button.back-to-dashboard {
+    background-color: #6c757d;
+}
+
+button.previous:hover, button.back-to-dashboard:hover {
+    background-color: #5a6268;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        margin: 10px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+
+    table {
+        font-size: 0.9em;
+    }
+
+    th, td {
+        padding: 8px 10px;
+    }
+}

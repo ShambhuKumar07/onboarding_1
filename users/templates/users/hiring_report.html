@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hiring Report</title>
+    <style>
+        /* Global Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: #e9ecef;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #444;
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        /* Form Styling */
+        form {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            background: #ffffff;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="date"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input[type="date"]:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
+        }
+
+        button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Table Styling */
+        table {
+            width: 90%;
+            max-width: 800px;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #4CAF50, #388e3c);
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        th, td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        tbody tr:hover {
+            background-color: #f7f7f7;
+            transition: background-color 0.3s;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .no-records {
+            text-align: center;
+            font-style: italic;
+            color: #777;
+            padding: 20px;
+        }
+
+        /* Links in Table */
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+
+        a:hover {
+            color: #388e3c;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hiring Report</h1>
+
+    <!-- Filter Form -->
+    <form method="get" action="{% url 'users:hiring_report' %}">
+        <label for="from_date">Joining Date (From):</label>
+        <input type="date" id="from_date" name="from_date" value="{{ from_date }}">
+    
+        <label for="date_of_joining">Joining Date (To):</label>
+        <input type="date" id="date_of_joining" name="date_of_joining" value="{{ date_of_joining }}">
+    
+        <button type="submit">Filter</button>
+    </form>
+
+    <!-- Table Display -->
+    <table>
+        <thead>
+            <tr>
+                <th>Applicant Name</th>
+                <th>Joining Date</th>
+                <th>End Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for profile in profiles %}
+                <tr>
+                    <td><a href="{% url 'users:profile_detail' profile_id=profile.id %}">{{ profile.fullname }}</a></td>
+                    <td>{{ profile.date_of_joining }}</td>
+                    <td>{{ profile.end_date }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3" class="no-records">No records found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

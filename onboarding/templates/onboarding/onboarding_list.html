@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="flex-title">
+    <div class="flex-title">
+        <div class="title-text">
+            <h3 class="section-title">Onboardings</h3>
+        </div>
+    </div>
+    <div class="">
+        <a href="{% url 'onboarding:onboarding_create' %}"
+            class="btn-floating btn-large waves-effect waves-light green darken-2 right">
+            <i class="material-icons">add</i>
+        </a>
+    </div>
+
+</div>
+{% include 'onboarding/partials/onboarding_list_card.html'%}
+{% endblock content %}

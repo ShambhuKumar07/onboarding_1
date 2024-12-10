@@ -1,0 +1,31 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Information (Page 1)</title>
+    <link rel="stylesheet" href="{% static 'applicant/css/styles.css' %}">
+</head>
+<body>
+    <h1>Personal Information Sheet</h1>
+ 
+    <form method="post" action="{% url 'applicant:page_1' %}">
+        {% csrf_token %}
+ 
+    <div>
+        {{ form.as_p }}  <!-- Automatically render form fields -->
+    </div>
+        <button><input type="submit" value="Save"></button> 
+    </form>
+ 
+    <div class="button-group">
+         
+        <button class="back-to-dashboard"><a href="{% url 'applicant:dashboard' %}">Back to Dashboard</a></button>
+        <button><a href="{% url 'applicant:page_2' %}">Next</a></button>
+    </div>
+
+<br>
+</body>
+</html>

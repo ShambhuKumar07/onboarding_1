@@ -1,0 +1,18 @@
+<form action="{% url 'employee_ctc' %}" method="post">
+    {% csrf_token %}
+    
+    <!-- Salary Form Fields -->
+    <h2>Salary Details</h2>
+    {{ salary_form.as_p }}
+
+    <!-- Contribution Form Fields -->
+    <h2>Contribution Details</h2>
+    {{ contribution_form.as_p }}
+
+    <!-- Deduction Form Fields -->
+    <h2>Deduction Details</h2>
+    {{ deduction_form.as_p }}
+    
+    <!-- Submit Button -->
+    <button type="submit">Submit</button>
+</form>

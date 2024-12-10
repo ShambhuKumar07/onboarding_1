@@ -1,0 +1,298 @@
+{% extends 'core/base.html' %}
+{% load humanize %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h4 class="dashboard-header">Employee Statistics</h4>
+    <div class="dashboard-grid">
+        <!-- Gender Distribution Chart -->
+        <div class="chart-card">
+            <h5 class="chart-title">Gender Distribution</h5>
+            <canvas id="genderChart" class="responsive-chart"></canvas>
+        </div>
+
+        <!-- Age Distribution Chart -->
+        <div class="chart-card">
+            <h5 class="chart-title">Age Distribution</h5>
+            <canvas id="ageChart" class="responsive-chart"></canvas>
+        </div>
+
+        <!-- Attrition Chart -->
+        <div class="chart-card">
+            <h5 class="chart-title">Attrition</h5>
+            <label for="attritionYearSelector">Select Year:</label>
+            <select id="attritionYearSelector" class="form-control">
+                {% for year in attrition_years %}
+                    <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+            </select>
+            <canvas id="attritionChart" class="responsive-chart"></canvas>
+        </div>
+
+        <!-- Hiring Chart -->
+        <div class="chart-card">
+            <h5 class="chart-title">Hiring Report</h5>
+            <label for="hiringYearSelector">Select Year:</label>
+            <select id="hiringYearSelector" class="form-control">
+                {% for year in hiring_years %}
+                    <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+            </select>
+            <canvas id="hiringChart" class="responsive-chart"></canvas>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    /* General Reset */
+    body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(to bottom right, #f4f9ff, #e1ecf5);
+        color: #333;
+        line-height: 1.6;
+    }
+
+    /* Dashboard Container */
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 25px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .dashboard-header {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #004080;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    /* Grid System */
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+    }
+
+    /* Card Styling */
+    .chart-card {
+        background: linear-gradient(to top left, #ffffff, #f8f9fa);
+        border: 1px solid #e4e7eb;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .chart-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .chart-title {
+        text-align: center;
+        font-size: 1.4rem;
+        margin-bottom: 20px;
+        color: #333;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    /* Chart Responsiveness */
+    .responsive-chart {
+        width: 100%;
+        height: auto;
+        max-height: 320px;
+    }
+
+    /* Form Styling */
+    .styled-select {
+        width: 100%;
+        padding: 8px 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccd5e0;
+        border-radius: 6px;
+        background: #f9fbfd;
+        font-size: 1rem;
+        font-weight: 500;
+        color: #333;
+        appearance: none;
+        transition: border-color 0.3s;
+    }
+
+    .styled-select:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    .selector-label {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .dashboard-header {
+            font-size: 1.5rem;
+        }
+
+        .chart-card {
+            padding: 15px;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+        }
+    }
+</style>
+
+<!-- Include Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Parse JSON data for all charts
+        const genderData = JSON.parse(document.getElementById('gender_data').textContent);
+        const ageData = JSON.parse(document.getElementById('age_data').textContent);
+        const attritionData = JSON.parse(document.getElementById('attrition_data').textContent);
+        const hiringData = JSON.parse(document.getElementById('hiring_data_chart').textContent);
+        console.log('Hiring Data:', hiringData);
+        const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+        // Gender Distribution Chart
+        const genderChartCtx = document.getElementById('genderChart').getContext('2d');
+        new Chart(genderChartCtx, {
+            type: 'pie',
+            data: {
+                labels: genderData.map(d => d.gender),
+                datasets: [{
+                    data: genderData.map(d => d.count),
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+                }],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true, position: 'bottom' },
+                },
+            },
+        });
+
+        // Age Distribution Chart
+        const ageChartCtx = document.getElementById('ageChart').getContext('2d');
+        new Chart(ageChartCtx, {
+            type: 'pie',
+            data: {
+                labels: ageData.map(d => d.label),
+                datasets: [{
+                    data: ageData.map(d => d.count),
+                    backgroundColor: ['#4BC0C0', '#FF6384', '#36A2EB'],
+                }],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true, position: 'bottom' },
+                },
+            },
+        });
+
+        // Utility to create Bar Charts
+        function createBarChart(chartId, year, dataByYear, backgroundColor, label) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            if (!ctx) return;
+
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: monthLabels,
+                    datasets: [{
+                        label: `${label} (${year})`,
+                        data: dataByYear[year] || Array(12).fill(0),
+                        backgroundColor: backgroundColor,
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: true } },
+                    scales: {
+                        x: { title: { display: true, text: 'Months' } },
+                        y: { title: { display: true, text: 'Count' }, beginAtZero: true },
+                    },
+                },
+            });
+        }
+
+        let attritionChart, hiringChart;
+
+        // Initialize Attrition Chart
+        const attritionYearSelector = document.getElementById('attritionYearSelector');
+        attritionChart = createBarChart(
+            'attritionChart',
+            attritionYearSelector.value,
+            attritionData.data,
+            '#FF6384',
+            'Attrition Count'
+        );
+        attritionYearSelector.addEventListener('change', function () {
+            if (attritionChart) attritionChart.destroy();
+            attritionChart = createBarChart(
+                'attritionChart',
+                this.value,
+                attritionData.data,
+                '#FF6384',
+                'Attrition Count'
+            );
+        });
+
+        // Initialize Hiring Chart
+        const hiringYearSelector = document.getElementById('hiringYearSelector');
+        console.log('Hiring Year Selector:', hiringYearSelector);
+        hiringChart = createBarChart(
+            'hiringChart',
+            hiringYearSelector.value,
+            hiringData.data,
+            '#36A2EB',
+            'Hiring Count'
+        );
+        hiringYearSelector.addEventListener('change', function () {
+            if (hiringChart) hiringChart.destroy();
+            hiringChart = createBarChart(
+                'hiringChart',
+                this.value,
+                hiringData.data,
+                '#36A2EB',
+                'Hiring Count'
+            );
+        });
+    });
+</script>
+
+<script type="application/json" id="gender_data">
+    {{ gender_data|safe }}
+</script>
+<script type="application/json" id="age_data">
+    {{ age_data|safe }}
+</script>
+
+<script type="application/json" id="attrition_data">
+    {{ attrition_data|safe }}
+</script>
+<script type="application/json" id="hiring_data_chart">
+    {{ hiring_data|safe }}
+</script>
+
+{% endblock %}
+

@@ -1,0 +1,47 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dashboard</title>
+    <link rel="stylesheet" href="{% static 'applicant/css/styles.css' %}">
+</head>
+<body>
+    <h1>Welcome {{ applicant.user.username }}</h1>
+    <h1><p>This is your dashboard</p></h1>
+    <div>
+        <button><a href="{% url 'applicant:page_1' %}">Personal Information Sheet</a></button>
+        <br>
+        <br>
+        <button><a href="{% url 'applicant:page_2' %}">Bank Account Details</a></button>
+        <br>
+        <br> 
+        <button><a href="{% url 'applicant:page_3' %}">Emergency Contact Details</a></button>
+       <br>
+       <br>
+        <button><a href="{% url 'applicant:page_4' %}">Family Details</a></button>
+        <br>
+        <br>
+        <button><a href="{% url 'applicant:page_5' %}">Educational Qualification</a></button>
+       <br>
+       <br>
+        <button><a href="{% url 'applicant:page_6' %}">Employment Record</a></button>
+       <br>
+       <br>
+       <button><a href="{% url 'applicant:languages_known' %}">languages_known</a></button>
+       <br>
+       <br>
+        <button><a href="{% url 'applicant:page_7' %}">References</a></button>
+    </div>
+
+    <ul class="top-right-menu">
+        <button><a href="{% url 'applicant_compensation' %}" class="custom-a">View Compensation</a></button>
+
+        <br><br>
+
+        <button><a href="{% url 'applicant_compliance' %}" class="custom-a">View Compliance</a></button>
+    </ul>
+</body>
+</html>

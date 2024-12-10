@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary/Allowance Table with Gross Salary</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        #gross-salary {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        function calculateGrossSalary() {
+            // Get the values of Amount per Month for each row
+            const amounts = document.querySelectorAll(".monthly-amount");
+            let grossSalary = 0;
+
+            // Sum up the values to calculate the Gross Salary
+            amounts.forEach(amount => {
+                grossSalary += parseFloat(amount.textContent.replace('₹', '').replace(',', '')) || 0;
+            });
+
+            // Display the Gross Salary
+            document.getElementById('gross-salary-month').textContent = '₹' + grossSalary.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            document.getElementById('gross-salary-annum').textContent = '₹' + (grossSalary * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        }
+    </script>
+</head>
+<body>
+
+<h2>Salary/Allowance Details</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Salary/Allowance Head</th>
+            <th>Amount per Month</th>
+            <th>Amount per Annum</th>
+            <th>Payment Frequency</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Basic Salary</td>
+            <td class="monthly-amount">₹50,000</td>
+            <td>₹6,00,000</td>
+            <td>Monthly</td>
+        </tr>
+        <tr>
+            <td>HRA</td>
+            <td class="monthly-amount">₹20,000</td>
+            <td>₹2,40,000</td>
+            <td>Monthly</td>
+        </tr>
+        <tr>
+            <td>Special Allowance</td>
+            <td class="monthly-amount">₹10,000</td>
+            <td>₹1,20,000</td>
+            <td>Monthly</td>
+        </tr>
+        <tr>
+            <td>Gross Salary</td>
+            <td id="gross-salary-month">₹0.00</td>
+            <td id="gross-salary-annum">₹0.00</td>
+            <td>  </td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- Button to calculate Gross Salary -->
+<button onclick="calculateGrossSalary()">Calculate Gross Salary</button>
+
+<!-- Display the Gross Salary -->
+ 
+
+</body>
+</html>

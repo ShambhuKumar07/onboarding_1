@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Total Contribution</title>
+    <link rel="stylesheet" href="{% static 'css/contribution_result.css' %}">
+</head>
+<body>
+    <h2>Employee Contribution Details</h2>
+    <p><strong>PF (Employer's Contribution):</strong> {{ contribution.pf_emp_contribution }}</p>
+    <p><strong>ESIC (Employer's Contribution):</strong> {{ contribution.esic_emp_contribution }}</p>
+    <p><strong>Mediclaim:</strong> {{ contribution.mediclaim }}</p>
+    <p><strong>Gratuity:</strong> {{ contribution.gratuity }}</p>
+    <h3><strong>Total Contribution:</strong> {{ total_contribution }}</h3>
+
+    <a href="{% url 'calculate_contribution' %}">Calculate Another Contribution</a>
+</body>
+</html>

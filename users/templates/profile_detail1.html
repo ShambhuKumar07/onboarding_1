@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Detail</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Profile Details: {{ profile.fullname }}</h1>
+
+    <!-- Personal Information -->
+    <h2>Personal Information</h2>
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Details</th>
+        </tr>
+        <tr>
+            <td>Employee Code</td>
+            <td>{{ profile.Employee_Code }}</td>
+        </tr>
+        <tr>
+            <td>First Name</td>
+            <td>{{ profile.first_name }}</td>
+        </tr>
+        <tr>
+            <td>Middle Name</td>
+            <td>{{ profile.middle_name }}</td>
+        </tr>
+        <tr>
+            <td>Last Name</td>
+            <td>{{ profile.last_name }}</td>
+        </tr>
+        <tr>
+            <td>Designation</td>
+            <td>{{ profile.designation }}</td>
+        </tr>
+        <tr>
+            <td>Date of Joining</td>
+            <td>{{ profile.date_of_joining }}</td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>{{ profile.email }}</td>
+        </tr>
+        <tr>
+            <td>Phone Number</td>
+            <td>{{ profile.phone_number }}</td>
+        </tr>
+        <tr>
+            <td>Gender</td>
+            <td>{{ profile.get_gender_display }}</td>
+        </tr>
+        <tr>
+            <td>Date of Birth</td>
+            <td>{{ profile.date_of_birth }}</td>
+        </tr>
+        <tr>
+            <td>Present Address</td>
+            <td>{{ profile.present_address }}</td>
+        </tr>
+        <tr>
+            <td>Permanent Address</td>
+            <td>{{ profile.permanent_address }}</td>
+        </tr>
+        <tr>
+            <td>Personal Email</td>
+            <td>{{ profile.personal_email }}</td>
+        </tr>
+        <tr>
+            <td>PAN Number</td>
+            <td>{{ profile.pan_number }}</td>
+        </tr>
+        <tr>
+            <td>Marital Status</td>
+            <td>{{ profile.marital_status }}</td>
+        </tr>
+    </table>
+
+    <!-- Bank Information -->
+    <h2>Bank Information</h2>
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Details</th>
+        </tr>
+        <tr>
+            <td>Bank Name</td>
+            <td>{{ profile.bank_name }}</td>
+        </tr>
+        <tr>
+            <td>IFSC Code</td>
+            <td>{{ profile.ifsc_code }}</td>
+        </tr>
+        <tr>
+            <td>Bank Account Number</td>
+            <td>{{ profile.bank_account_number }}</td>
+        </tr>
+    </table>
+
+    <!-- Emergency Contact -->
+    <h2>Emergency Contact Information</h2>
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Details</th>
+        </tr>
+        <tr>
+            <td>Contact Name</td>
+            <td>{{ profile.emergency_contact_name }}</td>
+        </tr>
+        <tr>
+            <td>Relation</td>
+            <td>{{ profile.emergency_contact_relation }}</td>
+        </tr>
+        <tr>
+            <td>Contact Number</td>
+            <td>{{ profile.emergency_contact_number }}</td>
+        </tr>
+    </table>
+
+    <!-- Family Members -->
+    <h2>Family Members</h2>
+    <table>
+        <tr>
+            <th>Relation</th>
+            <th>Name</th>
+            <th>Date of Birth</th>
+            <th>Sex</th>
+            <th>Age</th>
+        </tr>
+        {% for member in family_members %}
+        <tr>
+            <td>{{ member.relation }}</td>
+            <td>{{ member.name }}</td>
+            <td>{{ member.date_of_birth }}</td>
+            <td>{{ member.sex }}</td>
+            <td>{{ member.age }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Educational Qualifications -->
+    <h2>Educational Qualifications</h2>
+    <table>
+        <tr>
+            <th>Examination Passed</th>
+            <th>Year of Passing</th>
+            <th>School/College</th>
+            <th>Division</th>
+            <th>Document</th>
+        </tr>
+        {% for qualification in educational_qualifications %}
+        <tr>
+            <td>{{ qualification.examination_passed }}</td>
+            <td>{{ qualification.year_of_passing }}</td>
+            <td>{{ qualification.school_or_college }}</td>
+            <td>{{ qualification.division }}</td>
+            <td>
+                {% if qualification.document %}
+                <a href="{{ qualification.document.url }}">Download Document</a>
+                {% else %}
+                No Document
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Employment Records -->
+    <h2>Employment Records</h2>
+    <table>
+        <tr>
+            <th>Organization</th>
+            <th>Designation</th>
+            <th>Joining Date</th>
+            <th>Leaving Date</th>
+            <th>Document</th>
+        </tr>
+        {% for record in employment_records %}
+        <tr>
+            <td>{{ record.organization }}</td>
+            <td>{{ record.designation }}</td>
+            <td>{{ record.joining_date }}</td>
+            <td>{{ record.leaving_date }}</td>
+            <td>
+                {% if record.document %}
+                <a href="{{ record.document.url }}">Download Document</a>
+                {% else %}
+                No Document
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Language Proficiencies -->
+    <h2>Languages Known</h2>
+    <table>
+        <tr>
+            <th>Language</th>
+            <th>Speak</th>
+            <th>Read</th>
+            <th>Write</th>
+        </tr>
+        {% for language in language_proficiencies %}
+        <tr>
+            <td>{{ language.language }}</td>
+            <td>{{ language.get_speak_display }}</td>
+            <td>{{ language.get_read_display }}</td>
+            <td>{{ language.get_write_display }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- References -->
+    <h2>References</h2>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Occupation</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+        </tr>
+        {% for reference in references %}
+        <tr>
+            <td>{{ reference.name }}</td>
+            <td>{{ reference.occupation }}</td>
+            <td>{{ reference.phone_number }}</td>
+            <td>{{ reference.email }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
+
+
+
+
+<h2>Compensation Details</h2>
+{% if compensation_info %}
+<section>
+    
+    <table>
+        <tr><th>Field</th><th>Details</th></tr>
+        <tr><td>Basic Salary</td><td>{{ compensation_info.salary.basic }}</td></tr>
+        <tr><td>HRA</td><td>{{ compensation_info.salary.hra }}</td></tr>
+        <tr><td>Special Allowance</td><td>{{ compensation_info.salary.special_allowance }}</td></tr>
+        <tr><td>Gross Salary</td><td>{{ compensation_info.salary.gross_salary }}</td></tr>
+        <tr><td>Total Contribution</td><td>{{ compensation_info.contribution.emp_contribution }}</td></tr>
+        <tr><td>Total Deduction</td><td>{{ compensation_info.deduction.emp_deduction }}</td></tr>
+        <tr><td>CTC</td><td>{{ compensation_info.calculate_ctc }}</td></tr>
+    </table>
+</section>
+{% else %}
+    <p>No compensation details available for this profile.</p>
+{% endif %}
+
+
+<h2>Compensation Details</h2>
+
+<table>
+    <tr>
+        <th>Field</th>
+        <th>Details</th>
+    </tr>
+    {% if compensation_info %}
+    <tr>
+        <td>Basic Salary</td>
+        <td>{{ compensation_info.salary.basic }}</td>
+    </tr>
+    
+    <tr>
+        <td>HRA</td>
+        <td>{{ compensation_info.salary.hra }}</td>
+    </tr>
+    
+    <tr>
+        <td>Special Allowance</td>
+        <td>{{ compensation_info.salary.special_allowance }}</td>
+    </tr> 
+
+    <tr>
+        <td>Gross Salary</td>
+        <td>{{ compensation_info.salary.gross_salary }}</td>
+    </tr>
+    
+    <tr>
+        <td>Total Contribution</td>
+        <td>{{ compensation_info.contribution.emp_contribution }}</td>
+    </tr> 
+    <tr>
+        <td>Total Deduction</td>
+        <td>{{ compensation_info.deduction.emp_deduction }}</td>
+    </tr> 
+    <tr>
+        <td>CTC</td>
+        <td>{{ compensation_info.calculate_ctc }}</td>
+    </tr> 
+    {% else %}
+    <tr>
+        <td colspan="2">No compensation details available for this profile.</td>
+    </tr>
+    
+    {% endif %}
+
+</table>

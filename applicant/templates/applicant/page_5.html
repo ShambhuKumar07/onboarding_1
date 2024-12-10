@@ -1,0 +1,75 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Qualification (Page 5)</title>
+    <link rel="stylesheet" href="{% static 'applicant/css/styles.css' %}">
+    <script>
+        function addQualificationRow() {
+            const table = document.getElementById('qualification-table');
+            const newRow = table.insertRow();
+            
+            const examPassedCell = newRow.insertCell(0);
+             
+            const yearOfPassingCell = newRow.insertCell(1);
+             
+            const schoolCollegeUniversityCell = newRow.insertCell(2);
+             
+            const subjectsCell = newRow.insertCell(3);
+             
+            const divisionCell = newRow.insertCell(4);
+             
+            const documentCell = newRow.insertCell(5); // New cell for document upload
+             
+
+
+            examPassedCell.innerHTML = `<input type="text" name="exam_passed" required>`;
+            yearOfPassingCell.innerHTML = `<input type="number" name="year_of_passing" required>`;
+            schoolCollegeUniversityCell.innerHTML = `<input type="text" name="school_college_university" required>`;
+            subjectsCell.innerHTML = `<input type="text" name="subjects" required>`;
+            divisionCell.innerHTML = `<input type="text" name="division" required>`;
+            documentCell.innerHTML = `<input type="file" name="document">`; // Field for document upload
+        }
+    </script>
+</head>
+<body>
+    <h1>Educational Qualification</h1>
+
+    <form method="POST" action="{% url 'applicant:page_5' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <table id="qualification-table"> <!-- Added id here -->
+            <tr>
+                <th>Examination Passed</th>
+                <th>Year of Passing</th>
+                <th>School/College/University</th>
+                <th>Subjects</th>
+                <th>Division</th>
+                <th>Upload Document</th> <!-- New column -->
+            </tr>
+            <tr>
+                <td>{{ form.examination_passed }}</td>
+                <td>{{ form.year_of_passing }}</td>
+                <td>{{ form.school_or_college }}</td>
+                <td>{{ form.subjects }}</td>
+                <td>{{ form.division }}</td>
+                <td>{{ form.document }}</td> <!-- New field -->
+            </tr>
+        </table>
+        <button type="button" onclick="addQualificationRow()">Add Qualification</button>
+        <br><br>
+        <button><input type="submit" value="Save"></button>
+    </form>
+   
+    <div class="button-group">
+        <button class="previous"><a href="{% url 'applicant:page_4' %}">Previous</a></button>
+        <button class="back-to-dashboard"><a href="{% url 'applicant:dashboard' %}">Back to Dashboard</a></button>
+        <button class="next"><a href="{% url 'applicant:page_6' %}">Next</a></button>
+    </div>
+<br>
+</body>
+</html>

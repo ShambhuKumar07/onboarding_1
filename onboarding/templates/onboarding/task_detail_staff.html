@@ -1,0 +1,71 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<div class="flex-title">
+    <div class="title-text">
+        <h3 class="section-title">{{o_task.task.title}}</h3>
+        <h5 class="section-subtitle">{{o_task.onboarding.newemployee.profile.fullname}}</h5>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col s9">
+        <div class="row">
+            <div class="col s12">
+                {% include 'onboarding/partials/task_information.html' %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                {% include 'onboarding/partials/task_description.html' %}
+            </div>
+        </div>
+    </div>
+    <div class="col s3">
+        <div class="row">
+            <div class="col s12">
+                {% include 'onboarding/partials/task_change_state.html' %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                {% include 'onboarding/partials/task_assign_person.html' %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                {% include 'onboarding/partials/task_assign_date.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+
+        var elemsPicker = document.querySelector('.datepicker');
+
+        var dateInputs = document.querySelector('div.date-field > input')
+        //var instancePicker = M.Datepicker.init(dateInputs, { format: "yyyy-mm-dd"});
+        var startingDate = document.querySelector('#dateDueChangeContainer').getAttribute('data-date')
+        
+        var instancePicker = M.Datepicker.init(dateInputs,{defaultDate:moment(startingDate).toDate()});
+        if(startingDate) {
+            var momentDate = moment(startingDate).format('MMM D, YYYY')
+            document.querySelector('#id_date_due').value = momentDate
+            M.Datepicker.getInstance(dateInputs).setDate(moment(startingDate).toDate())
+        }
+
+
+
+    });
+</script>
+{% endblock scripts %}

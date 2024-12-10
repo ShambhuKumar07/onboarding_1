@@ -1,0 +1,201 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee CTC Form</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <h2>Employee CTC Form</h2>
+
+    <!-- Main CTC Form -->
+    <form action="{% url 'employee_ctc' %}" method="post">
+        {% csrf_token %}
+
+        <h2>Select Applicant</h2>
+        <select name="applicant" required>
+            <option value="">-- Select Applicant --</option>
+            {% for applicant in applicants %}
+                <option value="{{ applicant.id }}">{{ applicant.user.username }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Salary Details Table -->
+        <h2>Salary Details</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Salary/Allowance Head</th>
+                    <th>Amount per Month</th>
+                    <th>Amount per Annum</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Basic Salary</td>
+                    <td><input type="number" id="id_basic" name="basic" oninput="calculateGrossSalary()"></td>
+                    <td id="annual-basic">₹0.00</td>
+                </tr>
+                <tr>
+                    <td>HRA</td>
+                    <td><input type="number" id="id_hra" name="hra" oninput="calculateGrossSalary()"></td>
+                    <td id="annual-hra">₹0.00</td>
+                </tr>
+                <tr>
+                    <td>Special Allowance</td>
+                    <td><input type="number" id="id_special_allowance" name="special_allowance" oninput="calculateGrossSalary()"></td>
+                    <td id="annual-special-allowance">₹0.00</td>
+                </tr>
+                <tr>
+                    <td>Gross Salary</td>
+                    <td id="gross-salary-month">₹0.00</td>
+                    <td id="gross-salary-annum">₹0.00</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Contributions Table -->
+        <h2>Employer Contributions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Contribution Head</th>
+                    <th>Amount per Month</th>
+                    <th>Amount per Annum</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>PF (Employer Contribution)</td>
+                    <td><input type="number" id="id_pf_contribution" name="pf_emp_contribution" oninput="calculateContributions()"></td>
+                    <td id="annual-pf">₹0.00</td>
+                </tr>
+                <tr>
+                    <td>ESIC (Employer Contribution)</td>
+                    <td><input type="number" id="id_esic_contribution" name="esic_emp_contribution" oninput="calculateContributions()"></td>
+                    <td id="annual-esic">₹0.00</td>
+                </tr>
+                <tr>
+                    <td>Mediclaim</td>
+                    <td><input type="number" id="id_mediclaim" name="mediclaim" oninput="calculateContributions()"></td>
+                    <td id="annual-mediclaim">₹0.00</td>
+                </tr>
+                <tr>
+                    <td>Gratuity</td>
+                    <td><input type="number" id="id_gratuity" name="gratuity" oninput="calculateContributions()"></td>
+                    <td id="annual-gratuity">₹0.00</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Deductions Table -->
+        <h2>Employee Deductions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Deduction Head</th>
+                    <th>Amount per Month</th>
+                    <th>Amount per Annum</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>PF Deduction</td>
+                    <td><input type="number" id="id_pf_deduction" name="pf_deduction" oninput="calculateDeductions()"></td>
+                    <td id="annual-pf-deduction">₹0.00</td>
+                </tr>
+                <tr>
+                    <td>ASIC Deduction</td>
+                    <td><input type="number" id="id_asic_deduction" name="asic_deduction" oninput="calculateDeductions()"></td>
+                    <td id="annual-asic-deduction">₹0.00</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Final CTC Display -->
+        <h3>Gross CTC: <span id="ctc-amount">₹0.00</span></h3>
+
+        <!-- Submit Button for the Main CTC Form -->
+        <button type="submit">Submit CTC Data</button>
+    </form>
+
+    <!-- Separate form for importing Employee CTC data -->
+    <h2>Import Employee CTC Data</h2>
+    <form action="{% url 'import_employee_ctc' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="import_file">Select file to import:</label>
+        <input type="file" id="import_file" name="import_file" accept=".csv, .xls, .xlsx" required>
+        <button type="submit">Import</button>
+    </form>
+</body>
+</html>
+
+<script>
+function calculateGrossSalary() {
+    const basic = parseFloat(document.getElementById('id_basic').value) || 0;
+    const hra = parseFloat(document.getElementById('id_hra').value) || 0;
+    const specialAllowance = parseFloat(document.getElementById('id_special_allowance').value) || 0;
+
+    // Calculate monthly gross salary
+    const grossSalaryMonthly = basic + hra + specialAllowance;
+    const grossSalaryAnnual = grossSalaryMonthly * 12;
+
+    // Update gross salary display
+    document.getElementById('gross-salary-month').innerText = '₹' + grossSalaryMonthly.toFixed(2);
+    document.getElementById('gross-salary-annum').innerText = '₹' + grossSalaryAnnual.toFixed(2);
+
+    // Update annual amounts for each component
+    document.getElementById('annual-basic').innerText = '₹' + (basic * 12).toFixed(2);
+    document.getElementById('annual-hra').innerText = '₹' + (hra * 12).toFixed(2);
+    document.getElementById('annual-special-allowance').innerText = '₹' + (specialAllowance * 12).toFixed(2);
+
+    calculateCTC();
+}
+
+function calculateContributions() {
+    const pfContribution = parseFloat(document.getElementById('id_pf_contribution').value) || 0;
+    const esicContribution = parseFloat(document.getElementById('id_esic_contribution').value) || 0;
+    const mediclaim = parseFloat(document.getElementById('id_mediclaim').value) || 0;
+    const gratuity = parseFloat(document.getElementById('id_gratuity').value) || 0;
+
+    // Update annual contribution display
+    document.getElementById('annual-pf').innerText = '₹' + (pfContribution * 12).toFixed(2);
+    document.getElementById('annual-esic').innerText = '₹' + (esicContribution * 12).toFixed(2);
+    document.getElementById('annual-mediclaim').innerText = '₹' + (mediclaim * 12).toFixed(2);
+    document.getElementById('annual-gratuity').innerText = '₹' + (gratuity * 12).toFixed(2);
+
+    calculateCTC();
+}
+
+function calculateDeductions() {
+    const pfDeduction = parseFloat(document.getElementById('id_pf_deduction').value) || 0;
+    const asicDeduction = parseFloat(document.getElementById('id_asic_deduction').value) || 0;
+
+    // Update annual deduction display
+    document.getElementById('annual-pf-deduction').innerText = '₹' + (pfDeduction * 12).toFixed(2);
+    document.getElementById('annual-asic-deduction').innerText = '₹' + (asicDeduction * 12).toFixed(2);
+
+    calculateCTC();
+}
+
+function calculateCTC() {
+    const grossSalaryMonthly = parseFloat(document.getElementById('gross-salary-month').innerText.replace('₹', '')) || 0;
+    const pfContribution = parseFloat(document.getElementById('id_pf_contribution').value) || 0;
+    const esicContribution = parseFloat(document.getElementById('id_esic_contribution').value) || 0;
+    const mediclaim = parseFloat(document.getElementById('id_mediclaim').value) || 0;
+    const gratuity = parseFloat(document.getElementById('id_gratuity').value) || 0;
+
+    const pfDeduction = parseFloat(document.getElementById('id_pf_deduction').value) || 0;
+    const asicDeduction = parseFloat(document.getElementById('id_asic_deduction').value) || 0;
+
+    // Calculate total CTC
+    const totalContributions = pfContribution + esicContribution + mediclaim + gratuity;
+    const totalDeductions = pfDeduction + asicDeduction;
+    const ctcAmount = (grossSalaryMonthly * 12) + (totalContributions * 12) - (totalDeductions * 12);
+
+    document.getElementById('ctc-amount').innerText = '₹' + ctcAmount.toFixed(2);
+}
+</script>

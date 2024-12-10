@@ -1,0 +1,6 @@
+Question,Answer
+"Django is a high-level Python web framework that encourages rapid development and clean, pragmatic design.",TRUE
+Django comes with built-in authentication and authorization mechanisms.,TRUE
+Django uses the Model-View-Controller (MVC) architectural pattern.,FALSE
+Django allows developers to create reusable web applications through the use of 'apps'.,TRUE
+Django's ORM (Object-Relational Mapping) allows developers to interact with the database using Python objects.,TRUE

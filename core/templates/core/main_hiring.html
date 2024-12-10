@@ -1,0 +1,106 @@
+ 
+
+<div class="dashboard-container">
+    <h4 class="dashboard-header">Hiring Report</h4>
+
+    <!-- Combo Box for Year Selection -->
+    <div class="form-group">
+        <label for="hiringYearSelector">Select Year:</label>
+        <select id="hiringYearSelector" class="form-control">
+            {% for year in hiring_years %}
+                <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Bar Chart for Hiring Data -->
+    <div class="chart-card">
+        <h5 class="chart-title">Hiring by Month</h5>
+        <canvas id="hiringBarChart" class="responsive-chart"></canvas>
+    </div>
+</div>
+
+<!-- Add Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Inline Script to Render the Chart -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Parse hiring data from the script tag
+        const hiringData = JSON.parse(document.getElementById('hiring_data').textContent);
+        const hiringYears = hiringData.years; // List of years
+        const hiringDataByYear = hiringData.data; // Hiring data by year
+        const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        // Get the chart context
+        const hiringCtx = document.getElementById('hiringBarChart').getContext('2d');
+        let hiringChart;
+
+        // Function to update the bar chart for a specific year
+        function updateHiringChart(year) {
+            // Destroy the existing chart instance if it exists
+            if (hiringChart) {
+                hiringChart.destroy();
+            }
+
+            // Create a new chart instance
+            hiringChart = new Chart(hiringCtx, {
+                type: 'bar',
+                data: {
+                    labels: monthLabels,
+                    datasets: [{
+                        label: `Hiring Count (${year})`,
+                        data: hiringDataByYear[year] || Array(12).fill(0), // Default to zero if no data
+                        backgroundColor: '#36A2EB',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { 
+                            title: { display: true, text: 'Months' } 
+                        },
+                        y: { 
+                            title: { display: true, text: 'Count' },
+                            beginAtZero: true 
+                        },
+                    },
+                }
+            });
+        }
+
+        // Populate the chart with the first year as default
+        const hiringYearSelector = document.getElementById('hiringYearSelector');
+        updateHiringChart(hiringYearSelector.value);
+
+        // Update the chart when the year selection changes
+        hiringYearSelector.addEventListener('change', function () {
+            updateHiringChart(this.value);
+        });
+    });
+</script>
+
+<!-- Hiring Data in JSON Format -->
+<script type="application/json" id="hiring_data">
+    {{ hiring_data|safe }}
+</script>
+
+<!-- Additional Styles for Chart Responsiveness -->
+<style>
+    canvas.responsive-chart {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    .chart-card {
+        margin: 20px 0;
+    }
+
+    .form-group {
+        margin: 15px 0;
+    }
+</style>

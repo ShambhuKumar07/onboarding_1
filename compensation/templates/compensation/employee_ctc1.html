@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee CTC Form with Salary Details</title>
+     
+    <script>
+        function calculateGrossSalary() {
+            const basic = parseFloat(document.getElementById('id_basic').value) || 0;
+            const hra = parseFloat(document.getElementById('id_hra').value) || 0;
+            const specialAllowance = parseFloat(document.getElementById('id_special_allowance').value) || 0;
+
+            // Calculate Gross Salary
+            const grossSalary = basic + hra + specialAllowance;
+
+            // Update the gross salary display
+            document.getElementById('gross-salary-month').textContent = '₹' + grossSalary.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            document.getElementById('gross-salary-annum').textContent = '₹' + (grossSalary * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+
+            // Update annual amounts
+            document.getElementById('annual-basic').textContent = '₹' + (basic * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            document.getElementById('annual-hra').textContent = '₹' + (hra * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            document.getElementById('annual-special-allowance').textContent = '₹' + (specialAllowance * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        }
+    </script>
+</head>
+<body>
+<h2>Employee CTC Form</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Salary/Allowance Head</th>
+            <th>Amount per Month</th>
+            <th>Amount per Annum</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Basic Salary</td>
+            <td><input type="number" id="id_basic" oninput="calculateGrossSalary()"></td>
+            <td id="annual-basic">₹0.00</td>
+        </tr>
+        <tr>
+            <td>HRA</td>
+            <td><input type="number" id="id_hra" oninput="calculateGrossSalary()"></td>
+            <td id="annual-hra">₹0.00</td>
+        </tr>
+        <tr>
+            <td>Special Allowance</td>
+            <td><input type="number" id="id_special_allowance" oninput="calculateGrossSalary()"></td>
+            <td id="annual-special-allowance">₹0.00</td>
+        </tr>
+        <tr>
+            <td><button onclick="calculateGrossSalary()">Calculate Gross Salary</button></td>
+            <td id="gross-salary-month">₹0.00</td>
+            <td id="gross-salary-annum">₹0.00</td>
+        </tr>
+    </tbody>
+</table>
+<!-- Submit Button -->
+<button type="submit">Submit</button>
+</body>
+</html>

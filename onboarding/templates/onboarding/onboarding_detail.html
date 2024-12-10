@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+{% load core_extras %}
+{% block content %}
+<div class="flex-title">
+    <div class="title-text">
+        <h3 class="section-title">{{onboarding.newemployee.profile.fullname}}</h3>
+    </div>
+    <div class="flex-title">
+        <a href="{% url 'onboarding:onboarding_update' onboarding.id %}"
+            class="btn-floating btn-large waves-effect waves-light orange darken-2 right">
+            <i class="material-icons">edit</i>
+        </a>
+        <form action="{% url 'onboarding:onboarding_delete' onboarding.id %}" method="POST" class="ml-2">
+            {% csrf_token %}
+            <button type="submit" class="btn-floating btn-large waves-effect waves-light red darken-1 right">
+                <i class="material-icons white-text" data-position="bottom">delete</i>
+            </button>
+        </form>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col s7">
+
+        {% include 'onboarding/partials/personal_info.html' %}
+    </div>
+    <div class="col s5">
+
+        {% include 'onboarding/partials/onboarding_info.html' %}
+
+    </div>
+</div>
+<div class="row">
+    <div class="col s12">
+        {% include 'onboarding/partials/tasks_onboarding_card.html' %}
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('working')
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+
+        var elems = document.querySelectorAll('.tooltipped');
+        var instances = M.Tooltip.init(elems);
+    });
+</script>
+{% endblock scripts %}

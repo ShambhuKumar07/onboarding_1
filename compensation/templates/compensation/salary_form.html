@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate Gross Salary</title>
+    <style>
+        form {
+            width: 300px;
+            margin: 0 auto;
+        }
+        label, input {
+            display: block;
+            margin: 10px 0;
+        }
+        input[type="submit"] {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Enter Salary Details</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="basic">Basic Salary:</label>
+        <input type="text" id="basic" name="basic" required>
+
+        <label for="hra">HRA:</label>
+        <input type="text" id="hra" name="hra" required>
+
+        <label for="special_allowance">Special Allowance:</label>
+        <input type="text" id="special_allowance" name="special_allowance" required>
+
+        <input type="submit" value="Calculate Gross Salary">
+    </form>
+</body>
+</html>

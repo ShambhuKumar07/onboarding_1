@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee CTC Form</title>
+</head>
+<body>
+    <h1>Employee CTC Form</h1>
+    <form method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Employee Salary Details</legend>
+            {{ salary_form.as_p }}
+        </fieldset>
+
+        <fieldset>
+            <legend>Employee Contribution Details</legend>
+            {{ contribution_form.as_p }}
+        </fieldset>
+
+        <fieldset>
+            <legend>Employee Deduction Details</legend>
+            {{ deduction_form.as_p }}
+        </fieldset>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

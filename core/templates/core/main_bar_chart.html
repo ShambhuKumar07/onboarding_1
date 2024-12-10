@@ -1,0 +1,184 @@
+
+{% block content %}
+<div class="dashboard-container">
+    <h4 class="dashboard-header">Employee Statistics</h4>
+    <div class="dashboard-grid">
+        <!-- Gender Distribution Chart -->
+        <div class="chart-card">
+            <h5 class="chart-title">Gender Distribution</h5>
+            <canvas id="genderChart" class="responsive-chart"></canvas>
+        </div>
+
+        <!-- Age Distribution Chart -->
+        <div class="chart-card">
+            <h5 class="chart-title">Age Distribution</h5>
+            <canvas id="ageChart" class="responsive-chart"></canvas>
+        </div>
+
+        <!-- Attrition Chart -->
+        <div class="chart-card">
+            <h5 class="chart-title">Attrition</h5>
+            <label for="attritionYearSelector">Select Year:</label>
+            <select id="attritionYearSelector" class="form-control">
+                {% for year in attrition_years %}
+                    <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+            </select>
+            <canvas id="attritionChart" class="responsive-chart"></canvas>
+        </div>
+
+        <!-- Hiring Chart -->
+        <div class="chart-card">
+            <h5 class="chart-title">Hiring Report</h5>
+            <label for="hiringYearSelector">Select Year:</label>
+            <select id="hiringYearSelector" class="form-control">
+                {% for year in hiring_years %}
+                    <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+            </select>
+            <canvas id="hiringChart" class="responsive-chart"></canvas>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    /* General Reset */
+    body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #f0f4f7, #e0e7ec);
+        color: #444;
+    }
+
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #ffffff;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .dashboard-header {
+        text-align: center;
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 30px;
+        font-weight: bold;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .chart-card {
+        padding: 20px;
+        border-radius: 16px;
+        background: linear-gradient(145deg, #ffffff, #e6e6e6);
+        box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.1), -6px -6px 12px rgba(255, 255, 255, 0.5);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .chart-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.2), -8px -8px 20px rgba(255, 255, 255, 0.7);
+    }
+
+    .chart-title {
+        text-align: center;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+        color: #555;
+        font-weight: 600;
+    }
+
+    .responsive-chart {
+        width: 100%;
+        max-height: 300px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .dashboard-header {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<!-- Include Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const attritionData = JSON.parse(document.getElementById('attrition_data').textContent);
+        const hiringData = JSON.parse(document.getElementById('hiring_data_chart').textContent);
+
+        const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        function createBarChart(chartId, year, dataByYear, backgroundColor, label) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            if (!ctx) return;
+
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: monthLabels,
+                    datasets: [{
+                        label: `${label} (${year})`,
+                        data: dataByYear[year] || Array(12).fill(0),
+                        backgroundColor: backgroundColor,
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { title: { display: true, text: 'Months' } },
+                        y: { title: { display: true, text: 'Count' }, beginAtZero: true },
+                    },
+                },
+            });
+        }
+
+        let attritionChart, hiringChart;
+
+        function updateChart(chart, year, dataByYear, backgroundColor, label, chartId) {
+            if (chart) chart.destroy();
+            return createBarChart(chartId, year, dataByYear, backgroundColor, label);
+        }
+
+        // Initialize Attrition Chart
+        const attritionYearSelector = document.getElementById('attritionYearSelector');
+        attritionChart = createBarChart('attritionChart', attritionYearSelector.value, attritionData.data, '#FF6384', 'Attrition Count');
+        attritionYearSelector.addEventListener('change', function () {
+            attritionChart = updateChart(attritionChart, this.value, attritionData.data, '#FF6384', 'Attrition Count', 'attritionChart');
+        });
+
+        // Initialize Hiring Chart
+        const hiringYearSelector = document.getElementById('hiringYearSelector');
+        hiringChart = createBarChart('hiringChart', hiringYearSelector.value, hiringData.data, '#36A2EB', 'Hiring Count');
+        hiringYearSelector.addEventListener('change', function () {
+            hiringChart = updateChart(hiringChart, this.value, hiringData.data, '#36A2EB', 'Hiring Count', 'hiringChart');
+        });
+    });
+</script>
+
+<script type="application/json" id="gender_data">
+    {{ gender_data|safe }}
+</script>
+<script type="application/json" id="age_data">
+    {{ age_data|safe }}
+</script>
+
+<script type="application/json" id="attrition_data">
+    {{ attrition_data|safe }}
+</script>
+<script type="application/json" id="hiring_data_chart">
+    {{ hiring_data|safe }}
+</script>
+
+{% endblock %}

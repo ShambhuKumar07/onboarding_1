@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee CTC Form</title>
+    <script>
+        function calculateGrossSalary() {
+            const basic = parseFloat(document.getElementById('id_basic').value) || 0;
+            const hra = parseFloat(document.getElementById('id_hra').value) || 0;
+            const specialAllowance = parseFloat(document.getElementById('id_special_allowance').value) || 0;
+
+            const grossSalary = basic + hra + specialAllowance;
+
+            document.getElementById('id_gross_salary').value = grossSalary.toFixed(2);
+        }
+
+        function calculateTotalContribution() {
+            const pfContribution = parseFloat(document.getElementById('id_pf_emp_contribution').value) || 0;
+            const esicContribution = parseFloat(document.getElementById('id_esic_emp_contribution').value) || 0;
+            const mediclaim = parseFloat(document.getElementById('id_mediclaim').value) || 0;
+            const gratuity = parseFloat(document.getElementById('id_gratuity').value) || 0;
+
+            const totalContribution = pfContribution + esicContribution + mediclaim + gratuity;
+
+            document.getElementById('id_total_contribution').value = totalContribution.toFixed(2);
+        }
+
+        function calculateTotalDeduction() {
+            const pfDeduction = parseFloat(document.getElementById('id_pf_deduction').value) || 0;
+            const asicDeduction = parseFloat(document.getElementById('id_asic_deduction').value) || 0;
+
+            const totalDeduction = pfDeduction + asicDeduction;
+
+            document.getElementById('id_total_deduction').value = totalDeduction.toFixed(2);
+        }
+    </script>
+</head>
+<body>
+    <h1>Employee CTC Form</h1>
+    <form method="post">
+        {% csrf_token %}
+        
+        <fieldset>
+            <legend>Employee Salary Details</legend>
+            {{ salary_form.basic.label_tag }} {{ salary_form.basic }}<br>
+            {{ salary_form.hra.label_tag }} {{ salary_form.hra }}<br>
+            {{ salary_form.special_allowance.label_tag }} {{ salary_form.special_allowance }}<br>
+            <label for="id_gross_salary">Gross Salary:</label>
+            <input type="text" id="id_gross_salary" name="gross_salary" readonly /><br>
+            <button type="button" onclick="calculateGrossSalary()">Calculate Gross Salary</button>
+        </fieldset>
+
+        <fieldset>
+            <legend>Employee Contribution Details</legend>
+            {{ contribution_form.pf_emp_contribution.label_tag }} {{ contribution_form.pf_emp_contribution }}<br>
+            {{ contribution_form.esic_emp_contribution.label_tag }} {{ contribution_form.esic_emp_contribution }}<br>
+            {{ contribution_form.mediclaim.label_tag }} {{ contribution_form.mediclaim }}<br>
+            {{ contribution_form.gratuity.label_tag }} {{ contribution_form.gratuity }}<br>
+            <label for="id_total_contribution">Total Employee Contribution:</label>
+            <input type="text" id="id_total_contribution" name="total_contribution" readonly /><br>
+            <button type="button" onclick="calculateTotalContribution()">Calculate Total Contribution</button>
+        </fieldset>
+
+        <fieldset>
+            <legend>Employee Deduction Details</legend>
+            {{ deduction_form.pf_deduction.label_tag }} {{ deduction_form.pf_deduction }}<br>
+            {{ deduction_form.asic_deduction.label_tag }} {{ deduction_form.asic_deduction }}<br>
+            <label for="id_total_deduction">Total Employee Deduction:</label>
+            <input type="text" id="id_total_deduction" name="total_deduction" readonly /><br>
+            <button type="button" onclick="calculateTotalDeduction()">Calculate Total Deduction</button>
+        </fieldset>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

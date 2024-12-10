@@ -1,0 +1,64 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employment Record (Page 6)</title>
+    <link rel="stylesheet" href="{% static 'applicant/css/styles.css' %}">
+    <script>
+        function addEmploymentRow() {
+            const table = document.getElementById('employment-table');
+            const newRow = table.insertRow();
+
+            const organizationCell = newRow.insertCell(0);
+            const designationCell = newRow.insertCell(1);
+            const joiningDateCell = newRow.insertCell(2);
+            const leavingDateCell = newRow.insertCell(3);
+            const documentCell = newRow.insertCell(4);
+
+            organizationCell.innerHTML = `<input type="text" name="organization" required>`;
+            designationCell.innerHTML = `<input type="text" name="designation" required>`;
+            joiningDateCell.innerHTML = `<input type="date" name="joining_date" required>`;
+            leavingDateCell.innerHTML = `<input type="date" name="leaving_date" required>`;
+            documentCell.innerHTML = `<input type="file" name="document">`; // New field for document upload
+        }
+    </script>
+</head>
+<body>
+    <h1>Employment Record</h1>
+
+    <form method="POST" action="{% url 'applicant:page_6' %}" enctype="multipart/form-data"> <!-- Add enctype for file upload -->
+        {% csrf_token %}
+        
+        <table id="employment-table"> <!-- Added id here -->
+            <tr>
+                <th>Organization</th>
+                <th>Designation</th>
+                <th>Joining Date</th>
+                <th>Leaving Date</th>
+                <th>Upload Document</th> <!-- New column -->
+            </tr>
+            <tr>
+                <td>{{ form.organization }}</td>
+                <td>{{ form.designation }}</td>
+                <td>{{ form.joining_date }}</td>
+                <td>{{ form.leaving_date }}</td>
+                <td>{{ form.document }}</td> <!-- New field -->
+            </tr>
+        </table>
+        
+        <button type="button" onclick="addEmploymentRow()">Add Employment</button>
+        <br><br>
+        <button><input type="submit" value="Save"></button>
+    </form>
+ 
+    <div class="button-group">
+        <button class="previous"><a href="{% url 'applicant:page_5' %}">Previous</a></button>
+        <button class="back-to-dashboard"><a href="{% url 'applicant:dashboard' %}">Back to Dashboard</a></button>
+        <button class="next"><a href="{% url 'applicant:languages_known' %}">Next</a></button>
+    </div>
+    <br>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee CTC Form with Salary Details</title>
+  
+    <script>
+        function calculateGrossSalary() {
+            const basic = parseFloat(document.getElementById('id_basic').value) || 0;
+            const hra = parseFloat(document.getElementById('id_hra').value) || 0;
+            const specialAllowance = parseFloat(document.getElementById('id_special_allowance').value) || 0;
+
+            // Calculate Gross Salary
+            const grossSalary = basic + hra + specialAllowance;
+
+            // Update the gross salary display
+            document.getElementById('gross-salary-month').textContent = '₹' + grossSalary.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            document.getElementById('gross-salary-annum').textContent = '₹' + (grossSalary * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+
+            // Update annual amounts
+            document.getElementById('annual-basic').textContent = '₹' + (basic * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            document.getElementById('annual-hra').textContent = '₹' + (hra * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            document.getElementById('annual-special-allowance').textContent = '₹' + (specialAllowance * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        }
+
+        function calculateTotalContribution() {
+        const pf = parseFloat(document.getElementById('id_pf_emp_contribution').value) || 0;
+        const esic = parseFloat(document.getElementById('id_esic_emp_contribution').value) || 0;
+        const mediclaim = parseFloat(document.getElementById('id_mediclaim').value) || 0;
+        const gratuity = parseFloat(document.getElementById('id_gratuity').value) || 0;
+
+        // Calculate total contribution
+        const totalContribution = pf + esic + mediclaim + gratuity;
+
+        // Update the total contribution display
+        document.getElementById('total-contribution-month').textContent = '₹' + totalContribution.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        document.getElementById('total-contribution-annum').textContent = '₹' + (totalContribution * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+
+        // Update annual amounts
+        document.getElementById('annual-pf').textContent = '₹' + (pf * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        document.getElementById('annual-esic').textContent = '₹' + (esic * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        document.getElementById('annual-mediclaim').textContent = '₹' + (mediclaim * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        document.getElementById('annual-gratuity').textContent = '₹' + (gratuity * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        }
+
+        function calculateTotalDeduction() {
+            const pfDeduction = parseFloat(document.getElementById('id_pf_deduction').value) || 0;
+            const asicDeduction = parseFloat(document.getElementById('id_asic_deduction').value) || 0;
+
+            const totalDeduction = pfDeduction + asicDeduction;
+            document.getElementById('total-deduction-month').textContent = '₹' + totalDeduction.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            document.getElementById('total-deduction-annum').textContent = '₹' + (totalDeduction * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        }
+
+        function calculateCTC() {
+            calculateGrossSalary();
+            calculateTotalContribution();
+
+            const grossSalary = parseFloat(document.getElementById('gross-salary-month').textContent.replace('₹', '').replace(/,/g, '')) || 0;
+            const totalContribution = parseFloat(document.getElementById('total-contribution-month').textContent.replace('₹', '').replace(/,/g, '')) || 0;
+
+            const ctc = grossSalary + totalContribution;
+            document.getElementById('ctc-value-month').textContent = '₹' + ctc.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            document.getElementById('ctc-value-annum').textContent = '₹' + (ctc * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        }
+
+        function calculateTotalDeduction() {
+            const pfDeduction = parseFloat(document.getElementById('id_pf_deduction').value) || 0;
+            const esicDeduction = parseFloat(document.getElementById('id_esic_deduction').value) || 0;
+    
+            // Calculate total deduction
+            const totalDeduction = pfDeduction + esicDeduction;
+    
+            // Update the total deduction display
+            document.getElementById('total-deduction-month').textContent = '₹' + totalDeduction.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            document.getElementById('total-deduction-annum').textContent = '₹' + (totalDeduction * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+    
+            // Update annual amounts for each deduction
+            document.getElementById('annual-pf-deduction').textContent = '₹' + (pfDeduction * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            document.getElementById('annual-esic-deduction').textContent = '₹' + (esicDeduction * 12).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        }
+
+    </script>
+</head>
+<body>
+
+<h2>Employee CTC Form</h2>
+
+<!-- Salary Details Table -->
+<form action="{% url 'employee_ctc' %}" method="post">
+    {% csrf_token %}
+    <!-- Salary Details Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Salary/Allowance Head</th>
+                <th>Amount per Month</th>
+                <th>Amount per Annum</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Basic Salary</td>
+                <td><input type="number" name="basic" id="id_basic" oninput="calculateGrossSalary()"></td>
+                <td id="annual-basic">₹0.00</td>
+            </tr>
+            <tr>
+                <td>HRA</td>
+                <td><input type="number" name="hra" id="id_hra" oninput="calculateGrossSalary()"></td>
+                <td id="annual-hra">₹0.00</td>
+            </tr>
+            <tr>
+                <td>Special Allowance</td>
+                <td><input type="number" name="special_allowance" id="id_special_allowance" oninput="calculateGrossSalary()"></td>
+                <td id="annual-special-allowance">₹0.00</td>
+            </tr>
+            <tr>
+                <td><button type="button" onclick="calculateGrossSalary()">Calculate Gross Salary</button></td>
+                <td id="gross-salary-month">₹0.00</td>
+                <td id="gross-salary-annum">₹0.00</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Contribution Details Table -->
+    <h2>Contribution Details</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Contribution Head</th>
+                <th>Amount per Month</th>
+                <th>Amount per Annum</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>PF (Employer's Contribution)</td>
+                <td><input type="number" id="id_pf_emp_contribution" oninput="calculateTotalContribution()"></td>
+                <td id="annual-pf">₹0.00</td>
+            </tr>
+            <tr>
+                <td>ESIC (Employer's Contribution)</td>
+                <td><input type="number" id="id_esic_emp_contribution" oninput="calculateTotalContribution()"></td>
+                <td id="annual-esic">₹0.00</td>
+            </tr>
+            <tr>
+                <td>Mediclaim</td>
+                <td><input type="number" id="id_mediclaim" oninput="calculateTotalContribution()"></td>
+                <td id="annual-mediclaim">₹0.00</td>
+            </tr>
+            <tr>
+                <td>Gratuity</td>
+                <td><input type="number" id="id_gratuity" oninput="calculateTotalContribution()"></td>
+                <td id="annual-gratuity">₹0.00</td>
+            </tr>
+            <tr>
+                <td><button type="button" onclick="calculateTotalContribution()">Calculate Contribution</button></td>
+                <td id="total-contribution-month">₹0.00</td>
+                <td id="total-contribution-annum">₹0.00</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Deduction Details -->
+    <h2>Deduction Details</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Deduction Head</th>
+                <th>Amount per Month</th>
+                <th>Amount per Annum</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>PF Deduction</td>
+                <td><input type="number" id="id_pf_deduction" oninput="calculateTotalDeduction()"></td>
+                <td id="annual-pf-deduction">₹0.00</td>
+            </tr>
+            <tr>
+                <td>ESIC Deduction</td>
+                <td><input type="number" id="id_esic_deduction" oninput="calculateTotalDeduction()"></td>
+                <td id="annual-esic-deduction">₹0.00</td>
+            </tr>
+            <tr>
+                <td><button type="button" onclick="calculateTotalDeduction()">Calculate Deduction</button></td>
+                <td id="total-deduction-month">₹0.00</td>
+                <td id="total-deduction-annum">₹0.00</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- CTC Calculation Section -->
+    <h2>CTC Details</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>CTC Head</th>
+                <th>Amount per Month</th>
+                <th>Amount per Annum</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><button type="button" onclick="calculateCTC()">Calculate CTC</button></td>
+                <td id="ctc-value-month">₹0.00</td>
+                <td id="ctc-value-annum">₹0.00</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Submit Button -->
+    <button type="submit">Submit</button>
+</form>
+
+</body>
+</html>
+ 

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gross Salary</title>
+</head>
+<body>
+    <h2>Salary Breakdown</h2>
+    <p><strong>Basic Salary:</strong> {{ salary.basic }}</p>
+    <p><strong>HRA:</strong> {{ salary.hra }}</p>
+    <p><strong>Special Allowance:</strong> {{ salary.special_allowance }}</p>
+    <h3><strong>Gross Salary:</strong> {{ gross_salary }}</h3>
+    <a href="{% url 'calculate_salary' %}">Calculate Another Salary</a>
+</body>
+</html>

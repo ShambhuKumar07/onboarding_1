@@ -1,0 +1,73 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employment Record (Page 6)</title>
+    <link rel="stylesheet" href="{% static 'applicant/css/styles.css' %}">
+</head>
+<body>
+    <h1>Employment Record</h1>
+
+    <form method="POST" action="{% url 'applicant:page_6' %}">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>Organization</th>
+                <th>Designation</th>
+                <th>Joining Date</th>
+                <th>Leaving Date</th>
+            </tr>
+            <tr>
+                <td>{{ form.organization }}</td>
+                <td>{{ form.designation }}</td>
+                <td>{{ form.joining_date }}</td>
+                <td>{{ form.leaving_date }}</td>
+            </tr>
+
+            <tr>
+                <td>{{ form.organization }}</td>
+                <td>{{ form.designation }}</td>
+                <td>{{ form.joining_date }}</td>
+                <td>{{ form.leaving_date }}</td>
+            </tr>
+
+            <tr>
+                <td>{{ form.organization }}</td>
+                <td>{{ form.designation }}</td>
+                <td>{{ form.joining_date }}</td>
+                <td>{{ form.leaving_date }}</td>
+            </tr>
+
+
+            <tr>
+                <td>{{ form.organization }}</td>
+                <td>{{ form.designation }}</td>
+                <td>{{ form.joining_date }}</td>
+                <td>{{ form.leaving_date }}</td>
+            </tr>
+
+
+            <tr>
+                <td>{{ form.organization }}</td>
+                <td>{{ form.designation }}</td>
+                <td>{{ form.joining_date }}</td>
+                <td>{{ form.leaving_date }}</td>
+            </tr>
+
+        </table>
+
+        <input type="submit" value="Save">
+    </form>
+ 
+    <div class="button-group">
+        <button class="previous"><a href="{% url 'applicant:page_5' %}">Previous</a></button>
+        <button class="back-to-dashboard"><a href="{% url 'applicant:dashboard' %}">Back to Dashboard</a></button>
+        <button class="next"><a href="{% url 'applicant:languages_known' %}">Next</a></button>
+    </div>
+<br>
+
+</body>
+</html>
